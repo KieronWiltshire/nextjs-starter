@@ -1,0 +1,109 @@
+{
+    "global": {
+        "terms-of-service": "Terms of Service",
+        "privacy-policy": "Privacy Policy"
+    },
+    "auth": {
+        "sign-in": "Sign in",
+        "sign-up": "Sign up",
+        "sign-out": "Sign out",
+        "disclaimer": "By clicking continue, you agree to our <terms>Terms of Service</terms> and <privacy>Privacy Policy</privacy>",
+        "fields": {
+            "email": "Email",
+            "email-placeholder": "m@example.com",
+            "password": "Password",
+            "password-placeholder": "Enter your password",
+            "new-password": "New Password",
+            "first-name": "First Name",
+            "first-name-placeholder": "John",
+            "last-name": "Last Name",
+            "last-name-placeholder": "Doe",
+            "or-continue": "Or continue with",
+            "verification-code": "Verification Code"
+        },
+        "errors": {
+            "invalid-credentials": "Invalid email or password",
+            "email-already-exists": "An account with this email already exists",
+            "email-not-found": "No account found with this email address",
+            "invalid-token": "Invalid or expired reset token",
+            "token-expired": "The reset token has expired",
+            "invalid-code": "Invalid verification code",
+            "code-expired": "The verification code has expired",
+            "contact-administrator": "An error occurred. Please contact the administrator"
+        },
+        "forgot-password": {
+            "title": "Forgot Password",
+            "description": "Enter your email address and we'll send you a link to reset your password",
+            "submit": "Send reset link",
+            "submitting": "Sending reset link...",
+            "success": "Reset link sent! Please check your email.",
+            "remember-password": "Remember your password?"
+        },
+        "reset-password": {
+            "title": "Reset Password",
+            "description": "Enter your new password below",
+            "submit": "Reset Password",
+            "submitting": "Resetting password...",
+            "success": "Password reset successful! You can now login with your new password.",
+            "invalid-token": {
+                "title": "Invalid Reset Link",
+                "description": "The password reset link is invalid or has expired. Please request a new reset link.",
+                "request-new": "Request New Reset Link"
+            }
+        },
+        "sign-in-form": {
+            "title": "Welcome back",
+            "description": "Sign in with your Microsoft or Google account",
+            "microsoft-button": "Sign in with Microsoft",
+            "google-button": "Sign up with Google",
+            "submit": "Sign in",
+            "submitting": "Signing in...",
+            "success": "Sign in successful! Redirecting...",
+            "no-account": "Don't have an account?",
+            "forgot-password": "Forgot your password?",
+            "email-verification-required": "Please verify your email address before signing in",
+            "verify-email-link": "Click here to verify your email"
+        },
+        "sign-up-form": {
+            "title": "Create an account",
+            "description": "Sign up with your Microsoft or Google account",
+            "microsoft-button": "Sign up with Microsoft",
+            "google-button": "Sign up with Google",
+            "submit": "Create account",
+            "submitting": "Creating account...",
+            "success": "Account created successfully! Redirecting...",
+            "has-account": "Already have an account?"
+        },
+        "verify-email": {
+            "title": "Verify Email",
+            "enter-email": "Enter your email address to receive a verification code",
+            "enter-code": "Enter the verification code sent to your email",
+            "ready-to-verify": "Ready to verify your email address",
+            "continue": "Continue",
+            "verify": "Verify Email",
+            "submitting": "Verifying email...",
+            "success": "Email verified successfully! You can now sign in.",
+            "resend": "Resend Code",
+            "resending": "Resending code...",
+            "back-to-sign-in": "Back to sign-in"
+        }
+    },
+    "email": {
+        "verification": {
+            "preview": "Verify your email address",
+            "title": "Verify your email address",
+            "description": "Please verify your email address by clicking the button below. This link will expire in 24 hours.",
+            "buttonText": "Verify Email Address",
+            "footer": "If you did not request this verification, please ignore this email.",
+            "disclaimer": "This is an automated message, please do not reply to this email."
+        },
+        "passwordReset": {
+            "preview": "Reset your password",
+            "title": "Reset your password",
+            "description": "We received a request to reset your password. If you didn't make this request, you can safely ignore this email. To reset your password, click the button below. This link will expire in 1 hour.",
+            "buttonText": "Reset Password",
+            "footer": "If the button doesn't work, copy and paste this URL into your browser:",
+            "disclaimer": "This is an automated message, please do not reply to this email."
+        }
+    }
+}
