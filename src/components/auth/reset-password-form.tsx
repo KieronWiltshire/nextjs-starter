@@ -18,7 +18,6 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { ControllerRenderProps } from "react-hook-form"
 import { useTranslations } from "next-intl"
 import { Link } from "@/i18n/navigation"
-import { useCSRF } from "@/hooks/use-csrf"
 import { useState } from "react";
 import { Alert, AlertDescription, alertVariants } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
@@ -38,7 +37,6 @@ interface ResetPasswordFormProps {
 export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
   const t = useTranslations();
   const { execute: executeResetPassword, isPending } = useResetPassword();
-  const csrfToken = useCSRF();
   const [message, setMessage] = useState<Message>(null);
   
   const form = useForm<ResetPasswordFormData>({
@@ -53,7 +51,6 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
       const formData = new FormData();
       formData.append("token", token);
       formData.append("newPassword", newPassword);
-      formData.append("csrfToken", csrfToken());
       const [response] = await executeResetPassword(formData);
       
       if (response?.success) {

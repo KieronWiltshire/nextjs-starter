@@ -19,7 +19,6 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { ControllerRenderProps } from "react-hook-form"
 import { useTranslations } from "next-intl"
 import { Link } from "@/i18n/navigation";
-import { useCSRF } from "@/hooks/use-csrf";
 import { useState } from "react";
 import { Alert, AlertDescription, alertVariants } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
@@ -36,7 +35,6 @@ export function ForgotPasswordForm() {
   const t = useTranslations();
   
   const { execute: executeForgotPassword, isPending } = useForgotPassword();
-  const csrfToken = useCSRF();
   const [message, setMessage] = useState<Message>(null);
   
   const form = useForm<ForgotPasswordFormData>({
@@ -47,7 +45,6 @@ export function ForgotPasswordForm() {
     try {
       const formData = new FormData();
       formData.append("email", data.email);
-      formData.append("csrfToken", csrfToken());
       const [response] = await executeForgotPassword(formData);
       
       if (response?.success) {

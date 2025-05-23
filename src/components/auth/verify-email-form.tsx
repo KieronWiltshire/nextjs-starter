@@ -6,7 +6,6 @@ import { useVerifyEmail } from "@/hooks/actions"
 import { useTranslations } from "next-intl"
 import Link from "next/link"
 import { GalleryVerticalEnd } from "lucide-react"
-import { useCSRF } from "@/hooks/use-csrf"
 import { Input } from "@/components/ui/input"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -36,7 +35,6 @@ type Step = 'email' | 'verify'
 export function VerifyEmailForm({ email, code, token }: VerifyEmailFormProps) {
   const t = useTranslations();
   const { execute: executeVerifyEmail, isPending } = useVerifyEmail()
-  const csrfToken = useCSRF();
   const [message, setMessage] = useState<Message>(null);
   
   // Determine initial step based on provided parameters
@@ -65,7 +63,6 @@ export function VerifyEmailForm({ email, code, token }: VerifyEmailFormProps) {
     const formData = new FormData()
     formData.append("email", data.email)
     formData.append("code", data.code)
-    formData.append("csrfToken", csrfToken())
 
     if (token) {
         formData.append("token", token)

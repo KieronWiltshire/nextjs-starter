@@ -19,7 +19,6 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { ControllerRenderProps } from "react-hook-form"
 import { useTranslations } from "next-intl"
 import { Link } from "@/i18n/navigation";
-import { useCSRF } from "@/hooks/use-csrf";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Alert, AlertDescription, alertVariants } from "@/components/ui/alert";
@@ -38,7 +37,6 @@ export function SignInForm() {
   const router = useRouter();
   const { execute: executeLogin, isPending } = useSignIn();
   const { execute: executeOAuth } = useSignInOAuth();
-  const csrfToken = useCSRF();
   const [message, setMessage] = useState<Message>(null);
   
   const form = useForm<SignInFormData>({
@@ -50,7 +48,6 @@ export function SignInForm() {
       const formData = new FormData();
       formData.append("email", data.email);
       formData.append("password", data.password);
-      formData.append("csrfToken", csrfToken());
       const [response] = await executeLogin(formData);
       
       if (response?.success) {

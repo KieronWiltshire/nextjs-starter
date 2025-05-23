@@ -9,6 +9,7 @@ import { workos } from '@/lib/workos';
 import { protectedAction } from './protected';
 import { getLocale } from 'next-intl/server';
 import { sendEmailVerificationEmail, sendForgotPasswordEmail } from './email.actions';
+import { createServerAction } from 'zsa';
 
 export type AuthErrorCode =
   | 'PASSWORD_STRENGTH_ERROR'
@@ -32,7 +33,7 @@ const createAuthResponse = {
   error: (error: AuthErrorCode): AuthResponse => ({ success: false, error })
 };
 
-export const signUpAction = protectedAction.createServerAction()
+export const signUpAction = createServerAction()
   .input(signUpSchema, {
     type: "formData"
   })
@@ -73,7 +74,7 @@ export const signUpAction = protectedAction.createServerAction()
     }
   });
 
-export const signUpOAuthAction = protectedAction.createServerAction()
+export const signUpOAuthAction = createServerAction()
   .input(signUpOAuthSchema)
   .handler(async ({ input }) => {
     const state = {
@@ -90,7 +91,7 @@ export const signUpOAuthAction = protectedAction.createServerAction()
     return redirect(authUrl, RedirectType.replace);
   });  
 
-export const signInAction = protectedAction.createServerAction()
+export const signInAction = createServerAction()
   .input(signInSchema, {
     type: "formData"
   })
@@ -119,7 +120,7 @@ export const signInAction = protectedAction.createServerAction()
     }
   });
 
-export const signInOAuthAction = protectedAction.createServerAction()
+export const signInOAuthAction = createServerAction()
   .input(signInOAuthSchema)
   .handler(async ({ input }) => {
     const authUrl = workos.userManagement.getAuthorizationUrl({
@@ -131,7 +132,7 @@ export const signInOAuthAction = protectedAction.createServerAction()
     return redirect(authUrl, RedirectType.replace);
   });
 
-export const verifyEmailAction = protectedAction.createServerAction()
+export const verifyEmailAction = createServerAction()
   .input(verifyEmailSchema, {
     type: "formData"
   })
@@ -181,7 +182,7 @@ export const verifyEmailAction = protectedAction.createServerAction()
     }
   });  
 
-export const forgotPasswordAction = protectedAction.createServerAction()
+export const forgotPasswordAction = createServerAction()
   .input(forgotPasswordSchema, {
     type: "formData"
   })
@@ -202,7 +203,7 @@ export const forgotPasswordAction = protectedAction.createServerAction()
     }
   });
 
-export const resetPasswordAction = protectedAction.createServerAction()
+export const resetPasswordAction = createServerAction()
   .input(resetPasswordSchema, {
     type: "formData"
   })
@@ -225,7 +226,7 @@ export const resetPasswordAction = protectedAction.createServerAction()
     }
   });
 
-export const signOutAction = protectedAction.createServerAction()
+export const signOutAction = createServerAction()
   .handler(async (): Promise<AuthResponse> => {
     const session = await getSession();
     const { payload } = await decodeJwtFromSession(session);

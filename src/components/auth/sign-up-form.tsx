@@ -19,7 +19,6 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { ControllerRenderProps } from "react-hook-form"
 import { useTranslations } from "next-intl"
 import { Link } from "@/i18n/navigation";
-import { useCSRF } from "@/hooks/use-csrf";
 import { useState } from "react";
 import { Alert, AlertDescription, alertVariants } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
@@ -36,7 +35,6 @@ export function SignUpForm() {
   const t = useTranslations();
   const { execute: executeSignUp, isPending } = useSignUp();
   const { execute: executeOAuth } = useSignUpOAuth();
-  const csrfToken = useCSRF();
   const [message, setMessage] = useState<Message>(null);
   
   const form = useForm<SignUpFormData>({
@@ -50,7 +48,6 @@ export function SignUpForm() {
       formData.append("password", data.password);
       formData.append("firstName", data.firstName);
       formData.append("lastName", data.lastName);
-      formData.append("csrfToken", csrfToken());
       const [response] = await executeSignUp(formData);
       
       if (response?.success) {
