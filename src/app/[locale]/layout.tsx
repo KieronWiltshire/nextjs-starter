@@ -6,6 +6,7 @@ import { SocketIOProvider } from "@/providers/socketio";
 import { getSession } from "@/lib/session";
 import "./globals.css";
 import Layout from "@/components/layout";
+import { getWebSocketToken } from '@/actions/ws.actions';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,23 +32,7 @@ export default async function RootLayout({
 }>) {
   const {locale} = await params;
   const session = await getSession();
-  
-  let wsToken = null;
-
-  if (session.auth?.accessToken) {
-    try {
-      const response = await fetch(`${process.env.API_URL}/auth/ws-token`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${session.auth.accessToken}`,
-        }
-      });
-      if (response.ok) {
-        const { access_token: accessToken } = await response.json();
-        wsToken = accessToken;
-      }
-    } catch {}
-  }
+  const wsToken = await getWebSocketToken();
 
   return (
     <html lang={locale} suppressHydrationWarning>
