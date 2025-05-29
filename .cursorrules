@@ -1,0 +1,176 @@
+# Cursor Rules for Enterprise Next.js Frontend
+
+## Project Structure
+- Keep all source code in the `src/` directory
+- Follow the established directory structure:
+  - `actions/` - Server actions and API calls
+  - `app/` - Next.js app router pages
+  - `components/` - Reusable UI components
+  - `hooks/` - Custom React hooks
+  - `i18n/` - Internationalization files
+  - `lib/` - Utility functions and configurations
+  - `providers/` - React context providers
+  - `schema/` - Zod validation schemas
+  - `types/` - TypeScript type definitions
+
+## State Management
+- Keep state as local as possible
+- Implement proper loading and error states
+- Use React context for global state when necessary
+- Follow React best practices for state updates
+
+## Form Handling
+- Use React Hook Form for all forms
+- Implement Zod schemas for validation
+- Handle form errors gracefully
+- Use controlled components when necessary
+- Validate forms on both client and server side
+- Define all form schemas using Zod in the `schema/` directory
+- Use ZSA (Zod Server Actions) for form submissions
+
+## Styling Guidelines
+- Use Tailwind CSS for styling
+- Follow Tailwind CSS best practices
+- Use CSS modules for component-specific styles
+- Implement responsive design patterns
+- Support both dark and light themes
+- Follow the established design system
+
+## TypeScript
+- Maintain strict type safety
+- Define types in the `types/` directory
+- Use proper type annotations
+- Avoid using `any` type
+- Create interfaces for component props
+
+## Component Development
+- Create reusable components in `components/` directory
+- Follow atomic design principles
+- Implement proper prop types
+- Add JSDoc comments for component documentation
+- Keep components focused and single-responsibility
+
+## Internationalization
+- Use next-intl for translations
+- Keep all translations in the `i18n/` directory
+- Support RTL/LTR layouts
+- Use translation keys consistently
+
+## Testing
+- Write unit tests for components
+- Implement E2E tests for critical flows
+- Maintain good test coverage
+- Follow testing best practices
+
+## Security
+- Implement proper authentication checks
+- Use secure session management
+- Handle JWT tokens securely
+- Protect sensitive routes
+- Follow security best practices
+
+## Performance
+- Optimize images and assets
+- Implement proper code splitting
+- Use proper caching strategies
+- Monitor and optimize bundle size
+
+## Code Quality
+- Follow ESLint rules
+- Maintain consistent code style
+- Write clean and maintainable code
+- Document complex logic
+- Use proper error handling
+
+## Git Workflow
+- Write meaningful commit messages
+- Follow conventional commits
+- Keep commits focused and atomic
+- Review code before committing
+
+## Documentation
+- Keep documentation up to date
+- Document complex features
+- Add comments for non-obvious code
+- Update README when adding new features
+
+## Environment Variables
+- Keep all environment variables in `.env.local`
+- Document required environment variables
+- Never commit sensitive environment variables
+- Use proper environment variable validation
+
+## API Integration
+- Keep API calls in the `actions/` directory
+- Use ZSA (Zod Server Actions) for all server actions
+- Define input/output schemas using Zod for all server actions
+- Implement proper error handling
+- Use proper typing for API responses
+- Follow RESTful API best practices
+- Structure server actions as follows:
+  ```typescript
+  // Example structure in actions/example.ts
+  import { z } from 'zod';
+  import { createServerAction } from 'zsa';
+
+  const inputSchema = z.object({
+    // Define input validation
+  });
+
+  const outputSchema = z.object({
+    // Define output validation
+  });
+
+  export const exampleAction = createServerAction({
+    input: inputSchema,
+    output: outputSchema,
+    handler: async (input) => {
+      // Implementation
+    }
+  });
+  ```
+
+## Action Hooks
+- Create corresponding client-side hooks for all server actions in `hooks/actions.ts`
+- Use ZSA hooks for data fetching and state management
+- Implement proper loading and error states
+- Handle optimistic updates when appropriate
+- Structure action hooks as follows:
+  ```typescript
+  // Example structure in hooks/actions.ts
+  import { useServerAction } from "zsa-react";
+  import { exampleAction } from '@/actions/example';
+
+  export const useExampleAction = () => useServerAction(exampleAction);
+  ```
+
+## Accessibility
+- Follow WCAG guidelines
+- Implement proper ARIA attributes
+- Ensure keyboard navigation
+- Maintain proper color contrast
+- Support screen readers
+
+## Error Handling
+- Implement proper error boundaries
+- Show user-friendly error messages
+- Log errors appropriately
+- Handle edge cases gracefully
+
+## Performance Monitoring
+- Monitor page load times
+- Track Core Web Vitals
+- Implement proper analytics
+- Monitor error rates
+
+## Dependencies
+- Keep dependencies up to date
+- Audit dependencies regularly
+- Use specific versions
+- Document dependency requirements
+
+## Build Process
+- Follow proper build optimization
+- Implement proper caching
+- Optimize for production
+- Monitor bundle size 
