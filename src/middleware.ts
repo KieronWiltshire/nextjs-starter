@@ -5,15 +5,10 @@ import createMiddleware from 'next-intl/middleware';
 import {routing} from './i18n/routing';
 import { isValidAccessToken } from "./lib/jwt";
 import { workos } from "./lib/workos";
-import { applyCSRF } from "./lib/csrf";
 
 export async function middleware(request: NextRequest) {
     const session = await getSession();
     const next = createMiddleware(routing)(request);
-
-    if (request.method === "GET" || request.method === "HEAD") {
-        applyCSRF(next);
-      }
 
     if (session.auth) {
         const isValid = await isValidAccessToken(session.auth?.accessToken);

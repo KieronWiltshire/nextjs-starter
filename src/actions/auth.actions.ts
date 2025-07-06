@@ -6,7 +6,6 @@ import { redirect, RedirectType } from 'next/navigation';
 import { forgotPasswordSchema, signInOAuthSchema, signInSchema, resetPasswordSchema, signUpSchema, signUpOAuthSchema, verifyEmailSchema } from '@/schema/auth';
 import { decodeJwtFromSession } from '@/lib/jwt';
 import { workos } from '@/lib/workos';
-import { protectedAction } from './protected';
 import { getLocale } from 'next-intl/server';
 import { sendEmailVerificationEmail, sendForgotPasswordEmail } from './email.actions';
 import { createServerAction } from 'zsa';

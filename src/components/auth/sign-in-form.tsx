@@ -72,7 +72,7 @@ export function SignInForm() {
 
   const signInOAuth = async (provider: 'MicrosoftOAuth' | 'GoogleOAuth') => {
     try {
-      await executeOAuth({ csrfToken: csrfToken(), provider });
+      await executeOAuth({ provider });
     } catch {
       setMessage({ variant: "destructive", content: t('auth.errors.contact-administrator') });
     }
