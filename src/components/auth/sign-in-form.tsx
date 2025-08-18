@@ -24,6 +24,7 @@ import { useState } from "react";
 import { Alert, AlertDescription, alertVariants } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import { VariantProps } from "class-variance-authority";
+import { TOTPForm } from "./totp-form";
 
 type Message = {
   variant: VariantProps<typeof alertVariants>['variant'];
@@ -32,12 +33,23 @@ type Message = {
 
 type SignInFormData = z.infer<typeof signInSchema>;
 
+type MFAChallenge = {
+  pendingAuthenticationToken: string;
+  authenticationFactors: [
+    {
+      id: string;
+      type: string;
+    }
+  ]
+}
+
 export function SignInForm() {
   const t = useTranslations();
   const router = useRouter();
   const { execute: executeLogin, isPending } = useSignIn();
   const { execute: executeOAuth } = useSignInOAuth();
   const [message, setMessage] = useState<Message>(null);
+  const [mfaChallenge, setMfaChallenge] = useState<MFAChallenge | null>(null);
   
   const form = useForm<SignInFormData>({
     resolver: zodResolver(signInSchema)
@@ -48,6 +60,7 @@ export function SignInForm() {
       const formData = new FormData();
       formData.append("email", data.email);
       formData.append("password", data.password);
+
       const [response] = await executeLogin(formData);
       
       if (response?.success) {
@@ -60,6 +73,9 @@ export function SignInForm() {
           case 'EMAIL_VERIFICATION_REQUIRED':
             router.push(`/auth/verify-email?email=${encodeURIComponent(data.email)}`);
             break;
+          case 'MFA_CHALLENGE':
+            setMfaChallenge(response.metadata as MFAChallenge);
+            break;  
           case 'CONTACT_ADMINISTRATOR':
             setMessage({ variant: "destructive", content: t('auth.errors.contact-administrator') });
             break;
@@ -77,6 +93,21 @@ export function SignInForm() {
       setMessage({ variant: "destructive", content: t('auth.errors.contact-administrator') });
     }
   };
+
+  const handleBackToSignIn = () => {
+    setMfaChallenge(null);
+    setMessage(null);
+  };
+
+  // If MFA challenge is required, show TOTP form
+  if (mfaChallenge) {
+    return (
+      <TOTPForm
+        mfaChallenge={mfaChallenge}
+        onBack={handleBackToSignIn}
+      />
+    );
+  }
 
   return (
     <div className="flex w-full max-w-sm flex-col gap-6">

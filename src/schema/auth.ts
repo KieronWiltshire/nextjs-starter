@@ -19,7 +19,7 @@ export const signInSchema = object({
     .email("Invalid email"),
   password: string({ required_error: "Password is required" })
     .min(1, "Password is required")
-    .min(8, "Password must be more than 8 characters")
+    .min(8, "Password must be more than 8 characters"),
 });
 
 export const signInOAuthSchema = object({
@@ -51,4 +51,19 @@ export const resetPasswordSchema = object({
     .min(8, "New password must be more than 8 characters"),
   token: string({ required_error: "Token is required" })
     .min(1, "Token is required"),
+});
+
+export const totpSchema = object({
+  code: string({ required_error: "Code is required" })
+    .min(1, "Code is required")
+    .min(6, "Code must be 6 digits"),
+  pendingAuthenticationToken: string({ required_error: "Pending authentication token is required" })
+    .min(1, "Pending authentication token is required"),
+  authenticationChallengeId: string({ required_error: "Authentication challenge ID is required" })
+    .min(1, "Authentication challenge ID is required"),
+});
+
+export const initChallengeFactorSchema = object({
+  authenticationFactorId: string({ required_error: "Authentication factor ID is required" })
+    .min(1, "Authentication factor ID is required"),
 });

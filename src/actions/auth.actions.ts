@@ -3,7 +3,7 @@
 
 import { getSession, signIn, signOut } from '@/lib/session';
 import { redirect, RedirectType } from 'next/navigation';
-import { forgotPasswordSchema, signInOAuthSchema, signInSchema, resetPasswordSchema, signUpSchema, signUpOAuthSchema, verifyEmailSchema } from '@/schema/auth';
+import { forgotPasswordSchema, signInOAuthSchema, signInSchema, resetPasswordSchema, signUpSchema, signUpOAuthSchema, verifyEmailSchema, totpSchema, initChallengeFactorSchema } from '@/schema/auth';
 import { decodeJwtFromSession } from '@/lib/jwt';
 import { workos } from '@/lib/workos';
 import { getLocale } from 'next-intl/server';
@@ -20,16 +20,17 @@ export type AuthErrorCode =
   | 'INVALID_EMAIL_VERIFICATION_CODE'
   | 'INVALID_TOKEN'
   | 'TOKEN_EXPIRED'
+  | 'MFA_CHALLENGE'
   | 'CONTACT_ADMINISTRATOR'
   | string;
 
 export type AuthResponse = 
-  | { success: true }
-  | { success: false; error: AuthErrorCode };
+  | { success: true; metadata?: Record<string, any> }
+  | { success: false; error: AuthErrorCode; metadata?: Record<string, any> };
 
 const createAuthResponse = {
-  success: (): AuthResponse => ({ success: true }),
-  error: (error: AuthErrorCode): AuthResponse => ({ success: false, error })
+  success: (metadata?: Record<string, any>): AuthResponse => ({ success: true, metadata }),
+  error: (error: AuthErrorCode, metadata?: Record<string, any>): AuthResponse => ({ success: false, error, metadata })
 };
 
 export const signUpAction = createServerAction()
@@ -91,16 +92,27 @@ export const signUpOAuthAction = createServerAction()
   });  
 
 export const signInAction = createServerAction()
-  .input(signInSchema, {
+  .input(signInSchema.or(totpSchema), {
     type: "formData"
   })
   .handler(async ({ input }): Promise<AuthResponse> => {
     try {
-      const authenticationResponse = await workos.userManagement.authenticateWithPassword({
-        clientId: process.env.WORKOS_CLIENT_ID,
-        email: input.email,
-        password: input.password
-      });
+      let authenticationResponse;
+
+      if ('email' in input && 'password' in input) {
+        authenticationResponse = await workos.userManagement.authenticateWithPassword({
+          clientId: process.env.WORKOS_CLIENT_ID,
+          email: input.email,
+          password: input.password
+        });
+      } else {
+        authenticationResponse = await workos.userManagement.authenticateWithTotp({
+          clientId: process.env.WORKOS_CLIENT_ID,
+          code: input.code,
+          pendingAuthenticationToken: input.pendingAuthenticationToken,
+          authenticationChallengeId: input.authenticationChallengeId,
+        });
+      }
 
       const session = await getSession();
       await signIn(session, authenticationResponse);
@@ -115,6 +127,14 @@ export const signInAction = createServerAction()
         await sendEmailVerificationEmail(error.rawData.email_verification_id, error.rawData.pending_authentication_token);
         return createAuthResponse.error('EMAIL_VERIFICATION_REQUIRED');
       }
+
+      if (error?.errors?.some((error: any) => error.code === 'mfa_challenge')) {
+        return createAuthResponse.error('MFA_CHALLENGE', {
+          pendingAuthenticationToken: error.rawData.pending_authentication_token,
+          authenticationFactors: error.rawData.authentication_factors,
+        });
+      }
+
       return createAuthResponse.error('CONTACT_ADMINISTRATOR');
     }
   });
@@ -220,6 +240,32 @@ export const resetPasswordAction = createServerAction()
       }
       if (error?.rawData?.code === 'password_reset_token_expired') {
         return createAuthResponse.error('TOKEN_EXPIRED');
+      }
+      return createAuthResponse.error('CONTACT_ADMINISTRATOR');
+    }
+  });
+
+export const initChallengeFactorAction = createServerAction()
+  .input(initChallengeFactorSchema, {
+    type: "formData"
+  })
+  .handler(async ({ input }): Promise<AuthResponse> => {
+    try {
+      const challenge = await workos.mfa.challengeFactor({
+        authenticationFactorId: input.authenticationFactorId,
+      });
+
+      return createAuthResponse.success({
+        challengeId: challenge.id,
+      });
+    } catch (error: any) {
+      if (error?.rawData?.code === 'authentication_factor_not_found') {
+        return createAuthResponse.error('INVALID_CREDENTIALS');
+      }
+      if (error?.rawData?.code === 'authentication_factor_already_challenged') {
+        return createAuthResponse.error('MFA_CHALLENGE', {
+          message: 'Challenge already initiated'
+        });
       }
       return createAuthResponse.error('CONTACT_ADMINISTRATOR');
     }

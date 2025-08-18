@@ -86,6 +86,16 @@
             "resend": "Resend Code",
             "resending": "Resending code...",
             "back-to-sign-in": "Back to sign-in"
+        },
+        "totp-form": {
+            "title": "Two-Factor Authentication",
+            "description": "Enter the 6-digit code from your authenticator app",
+            "code-label": "Authentication Code",
+            "submit": "Verify Code",
+            "submitting": "Verifying code...",
+            "success": "Authentication successful! Redirecting...",
+            "invalid-code": "Invalid authentication code. Please try again.",
+            "back-to-sign-in": "Back to sign-in"
         }
     },
     "email": {

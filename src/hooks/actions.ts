@@ -1,4 +1,4 @@
-import { signInAction, signInOAuthAction, signOutAction, signUpAction, resetPasswordAction, forgotPasswordAction, signUpOAuthAction, verifyEmailAction, createEmailVerificationAction } from "@/actions/auth.actions";
+import { signInAction, signInOAuthAction, signOutAction, signUpAction, resetPasswordAction, forgotPasswordAction, signUpOAuthAction, verifyEmailAction, createEmailVerificationAction, initChallengeFactorAction } from "@/actions/auth.actions";
 import { useServerAction } from "zsa-react";
 
 export const useSignIn = () => useServerAction(signInAction);
@@ -9,3 +9,4 @@ export const useSignUpOAuth = () => useServerAction(signUpOAuthAction);
 export const useVerifyEmail = () => useServerAction(verifyEmailAction);
 export const useResetPassword = () => useServerAction(resetPasswordAction);
 export const useForgotPassword = () => useServerAction(forgotPasswordAction);
+export const useInitChallengeFactor = () => useServerAction(initChallengeFactorAction);
