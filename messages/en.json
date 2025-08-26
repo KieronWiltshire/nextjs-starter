@@ -55,7 +55,7 @@
             "title": "Welcome back",
             "description": "Sign in with your Microsoft or Google account",
             "microsoft-button": "Sign in with Microsoft",
-            "google-button": "Sign up with Google",
+            "google-button": "Sign in with Google",
             "submit": "Sign in",
             "submitting": "Signing in...",
             "success": "Sign in successful! Redirecting...",
