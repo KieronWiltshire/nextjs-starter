@@ -22,8 +22,6 @@ export async function GET(request: Request) {
 
     const session = await getSession();
     await signIn(session, authenticationResponse);
-
-    return redirect('/');
   } catch (error: any) {
     if (error.rawData.code === 'email_verification_required') {
       await sendEmailVerificationEmail(error.rawData.email_verification_id, error.rawData.pending_authentication_token);
@@ -32,4 +30,6 @@ export async function GET(request: Request) {
 
     return redirect(`/auth/sign-in?error=${error.rawData.code}`);
   }
+
+  return redirect('/');
 }
